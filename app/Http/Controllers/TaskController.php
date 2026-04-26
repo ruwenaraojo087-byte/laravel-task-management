@@ -7,11 +7,15 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function index()
-    {
-        $tasks = Task::latest()->get();
-        return view('tasks.index', compact('tasks'));
-    }
+   public function index()
+{
+    $tasks = Task::all();
+
+    $completed = Task::where('is_done', 1)->count();
+    $pending = Task::where('is_done', 0)->count();
+
+    return view('tasks.index', compact('tasks', 'completed', 'pending'));
+}
 
     public function create()
     {
@@ -24,11 +28,11 @@ class TaskController extends Controller
             'title' => 'required'
         ]);
 
-        $data = $request->all();
-
-$data['is_done'] = $request->has('is_done') ? 1 : 0;
-
-$task->update($data);
+        Task::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'is_done' => $request->has('is_done') ? 1 : 0,
+        ]);
 
         return redirect()->route('tasks.index');
     }
@@ -40,18 +44,22 @@ $task->update($data);
 
     public function update(Request $request, Task $task)
     {
-       $data = $request->all();
+        $request->validate([
+            'title' => 'required'
+        ]);
 
-$data['is_done'] = $request->has('is_done') ? 1 : 0;
+        $task->update([
+            'title' => $request->title,
+            'description' => $request->description,
+            'is_done' => $request->has('is_done') ? 1 : 0,
+        ]);
 
-Task::create($data);
         return redirect()->route('tasks.index');
     }
 
     public function destroy(Task $task)
     {
         $task->delete();
-
         return redirect()->route('tasks.index');
     }
 

@@ -2,28 +2,71 @@
 
 @section('content')
 
-<div class="card p-4">
+<div class="container py-4">
 
-    <h3>Add New Task</h3>
-
-    <form method="POST" action="{{ route('tasks.store') }}">
-        @csrf
-
-        <div class="mb-3">
-            <label>Task Title</label>
-            <input type="text" name="title" class="form-control" required>
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white">
+            <h4 class="mb-0">Add New Task</h4>
         </div>
 
-        <div class="mb-3">
-            <label>Description</label>
-            <textarea name="description" class="form-control"></textarea>
+        <div class="card-body">
+
+            <form method="POST" action="{{ route('tasks.store') }}">
+                @csrf
+
+                {{-- Task Title --}}
+                <div class="mb-3">
+                    <label for="title" class="form-label">Task Title</label>
+                    <input 
+                        type="text" 
+                        id="title"
+                        name="title" 
+                        class="form-control @error('title') is-invalid @enderror"
+                        value="{{ old('title') }}"
+                        placeholder="Enter task title"
+                        required
+                    >
+
+                    @error('title')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                {{-- Description --}}
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea 
+                        id="description"
+                        name="description" 
+                        class="form-control @error('description') is-invalid @enderror"
+                        rows="4"
+                        placeholder="Enter task description (optional)"
+                    >{{ old('description') }}</textarea>
+
+                    @error('description')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+                {{-- Buttons --}}
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        Save Task
+                    </button>
+
+                    <a href="{{ url()->previous() }}" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+
         </div>
-
-        <button class="btn btn-primary">
-            Save Task
-        </button>
-
-    </form>
+    </div>
 
 </div>
 
