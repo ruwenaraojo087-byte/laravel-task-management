@@ -52,6 +52,17 @@
                     @enderror
                 </div>
 
+                    <select name="category" class="form-control">
+    <option value="School" {{ $task->category == 'School' ? 'selected' : '' }}>School</option>
+    <option value="Chores" {{ $task->category == 'Chores' ? 'selected' : '' }}>Chores</option>
+    <option value="Others" {{ $task->category == 'Others' ? 'selected' : '' }}>Others</option>
+</select>
+
+                     @error('category')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                     @enderror
                 {{-- Status --}}
                 <div class="form-check mb-4">
                     <input 

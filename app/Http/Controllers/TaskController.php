@@ -31,6 +31,7 @@ class TaskController extends Controller
         Task::create([
             'title' => $request->title,
             'description' => $request->description,
+            'category' => $request->category,
             'is_done' => $request->has('is_done') ? 1 : 0,
         ]);
 
@@ -42,6 +43,7 @@ class TaskController extends Controller
         return view('tasks.edit', compact('task'));
     }
 
+    
     public function update(Request $request, Task $task)
     {
         $request->validate([
@@ -70,4 +72,29 @@ class TaskController extends Controller
 
         return back();
     }
+    
+    public function stats()
+{
+    // Tasks per category
+{
+    $categories = Task::select('category')
+        ->selectRaw('count(*) as total')
+        ->groupBy('category')
+        ->pluck('total', 'category');
+
+    return view('stats', compact('categories'));
+}
+
+    // Today's tasks (if you have created_at)
+    $todayTasks = Task::whereDate('created_at', now())
+        ->select('category')
+        ->selectRaw('count(*) as total')
+        ->groupBy('category')
+        ->pluck('total', 'category');
+
+    return view('stats', [
+        'categories' => $categories,
+        'todayTasks' => $todayTasks
+    ]);
+}
 }

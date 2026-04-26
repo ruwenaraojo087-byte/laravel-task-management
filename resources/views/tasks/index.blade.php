@@ -2,93 +2,81 @@
 
 @section('content')
 
-<div class="container py-4">
+<div class="dashboard-container">
 
     {{-- Header --}}
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="dashboard-header">
         <div>
-            <h2 class="mb-0">My Tasks</h2>
-            <small class="text-muted">Manage and track your daily tasks</small>
+            <h2>My Tasks</h2>
+            <p>Manage and track your daily tasks</p>
         </div>
 
-        <a href="{{ route('tasks.create') }}" class="btn btn-primary">
-            + Add Task
+        <a href="{{ route('tasks.create') }}" class="btn btn-add">
+            + New Task
         </a>
     </div>
 
-    
-    {{-- Empty State --}}
+    {{-- Stats --}}
+    <div class="stats">
+        <div class="stat-card">
+            <span>Done</span>
+            <h3>{{ $tasks->where('is_done', true)->count() }}</h3>
+        </div>
+
+        <div class="stat-card">
+            <span>Pending</span>
+            <h3>{{ $tasks->where('is_done', false)->count() }}</h3>
+        </div>
+
+        <div class="stat-card">
+            <span>Total</span>
+            <h3>{{ $tasks->count() }}</h3>
+        </div>
+    </div>
+
+    {{-- Empty --}}
     @if($tasks->isEmpty())
-        <div class="text-center py-5">
-            <h5 class="text-muted">No tasks yet</h5>
-            <p class="text-muted">Start by adding your first task.</p>
-            <a href="{{ route('tasks.create') }}" class="btn btn-primary">
+        <div class="empty">
+            <h5>No tasks yet</h5>
+            <a href="{{ route('tasks.create') }}" class="btn btn-add">
                 Create Task
             </a>
         </div>
     @endif
 
     {{-- Task List --}}
-    <div class="row g-3">
+    <div class="task-grid">
 
         @foreach($tasks as $task)
-        <div class="col-md-6">
+        <div class="task-card {{ $task->is_done ? 'done' : 'pending' }}">
 
-            <div class="card shadow-sm border-0 h-100">
-
-                <div class="card-body">
-
-                    {{-- Top Row --}}
-                    <div class="d-flex justify-content-between align-items-start">
-
-                        <div>
-                            <h5 class="mb-1 {{ $task->is_done ? 'text-decoration-line-through text-muted' : '' }}">
-                                {{ $task->title }}
-                            </h5>
-
-                            <p class="text-muted mb-0">
-                                {{ $task->description ?: 'No description provided.' }}
-                            </p>
-                        </div>
-
-                        {{-- Status Badge --}}
-                        <div>
-                            @if($task->is_done)
-                                <span class="badge bg-success">Done</span>
-                            @else
-                                <span class="badge bg-warning text-dark">Pending</span>
-                            @endif
-                        </div>
-
-                    </div>
-
+            <div class="task-top">
+                <div>
+                    <h5 class="{{ $task->is_done ? 'line' : '' }}">
+                        {{ $task->title }}
+                    </h5>
+                    <p>{{ $task->description ?: 'No description provided.' }}</p>
                 </div>
 
-                {{-- Footer Actions --}}
-                <div class="card-footer bg-white border-0 d-flex gap-2">
+                <span class="badge {{ $task->is_done ? 'bg-success' : 'bg-warning' }}">
+                    {{ $task->is_done ? 'Done' : 'Pending' }}
+                </span>
+            </div>
 
-                    <a href="{{ route('tasks.toggle', $task->id) }}" 
-                       class="btn btn-sm btn-outline-success">
-                        Mark as {{ $task->is_done ? 'Pending' : 'Done' }}
-                    </a>
+            <div class="task-actions">
+                <a href="{{ route('tasks.toggle', $task->id) }}" class="btn small success">
+                    {{ $task->is_done ? 'Undo' : 'Done' }}
+                </a>
 
-                    <a href="{{ route('tasks.edit', $task->id) }}" 
-                       class="btn btn-sm btn-outline-primary">
-                        Edit
-                    </a>
+                <a href="{{ route('tasks.edit', $task->id) }}" class="btn small primary">
+                    Edit
+                </a>
 
-                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST"
-                          onsubmit="return confirm('Are you sure you want to delete this task?')">
-                        @csrf
-                        @method('DELETE')
-
-                        <button class="btn btn-sm btn-outline-danger">
-                            Delete
-                        </button>
-                    </form>
-
-                </div>
-
+                <form action="{{ route('tasks.destroy', $task->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button class="btn small danger">Delete</button>
+                </form>
             </div>
 
         </div>

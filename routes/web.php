@@ -6,4 +6,6 @@ Route::get('/', [TaskController::class, 'index']);
 
 Route::resource('tasks', TaskController::class);
 
+Route::get('/stats', [TaskController::class, 'stats']);
+
 Route::get('tasks/{task}/toggle', [TaskController::class, 'toggle'])->name('tasks.toggle');

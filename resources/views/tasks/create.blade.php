@@ -51,6 +51,15 @@
                         </div>
                     @enderror
                 </div>
+                
+            <div class="form-group">
+                <label>Category</label>
+                <select name="category" class="category-select">
+                    <option value="School">School</option>
+                    <option value="Chores">Chores</option>
+                    <option value="Others">Others</option>
+                </select>
+            </div>
 
                 {{-- Buttons --}}
                 <div class="d-flex gap-2">
