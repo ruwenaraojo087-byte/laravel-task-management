@@ -34,7 +34,7 @@
                     @enderror
                 </div>
 
-                {{-- Description --}}
+{{-- Description --}}
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
                     <textarea 
@@ -51,15 +51,36 @@
                         </div>
                     @enderror
                 </div>
+
+                {{-- Due Date --}}
+                <div class="mb-3">
+                    <label for="due_date" class="form-label">Due Date</label>
+                    <input 
+                        type="date" 
+                        id="due_date"
+                        name="due_date" 
+                        class="form-control @error('due_date') is-invalid @enderror"
+                        value="{{ old('due_date') }}"
+                    >
+
+                    @error('due_date')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
                 
-            <div class="form-group">
-                <label>Category</label>
-                <select name="category" class="category-select">
-                    <option value="School">School</option>
-                    <option value="Chores">Chores</option>
-                    <option value="Others">Others</option>
-                </select>
-            </div>
+<div class="form-group">
+    <label>Category</label>
+    <select name="category" class="category-select">
+        <option value="">Select a category</option>
+        @forelse($categories as $category)
+            <option value="{{ $category->name }}">{{ $category->name }}</option>
+        @empty
+            <option value="">No categories - add one first!</option>
+        @endforelse
+    </select>
+</div>
 
                 {{-- Buttons --}}
                 <div class="d-flex gap-2">

@@ -20,7 +20,7 @@
                 <div class="mb-3">
                     <label for="title" class="form-label">Task Title</label>
                     <input 
-                        type="text" 
+                        type="text"  
                         id="title"
                         name="title" 
                         value="{{ old('title', $task->title) }}" 
@@ -35,7 +35,7 @@
                     @enderror
                 </div>
 
-                {{-- Description --}}
+{{-- Description --}}
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
                     <textarea 
@@ -52,17 +52,41 @@
                     @enderror
                 </div>
 
-                    <select name="category" class="form-control">
-    <option value="School" {{ $task->category == 'School' ? 'selected' : '' }}>School</option>
-    <option value="Chores" {{ $task->category == 'Chores' ? 'selected' : '' }}>Chores</option>
-    <option value="Others" {{ $task->category == 'Others' ? 'selected' : '' }}>Others</option>
-</select>
+                {{-- Due Date --}}
+                <div class="mb-3">
+                    <label for="due_date" class="form-label">Due Date</label>
+                    <input 
+                        type="date" 
+                        id="due_date"
+                        name="due_date" 
+                        class="form-control @error('due_date') is-invalid @enderror"
+                        value="{{ old('due_date', $task->due_date) }}"
+                    >
 
-                     @error('category')
+                    @error('due_date')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
-                     @enderror
+                    @enderror
+                </div>
+
+<div class="form-group">
+    <label>Category</label>
+    <select name="category" class="form-control">
+        <option value="">Select a category</option>
+        @forelse($categories as $category)
+            <option value="{{ $category->name }}" {{ $task->category == $category->name ? 'selected' : '' }}>{{ $category->name }}</option>
+        @empty
+            <option value="">No categories - add one first!</option>
+        @endforelse
+    </select>
+    @error('category')
+        <div class="invalid-feedback">
+            {{ $message }}
+        </div>
+    @enderror
+</div>
+
                 {{-- Status --}}
                 <div class="form-check mb-4">
                     <input 

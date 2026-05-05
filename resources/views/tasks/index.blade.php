@@ -50,12 +50,14 @@
         @foreach($tasks as $task)
         <div class="task-card {{ $task->is_done ? 'done' : 'pending' }}">
 
-            <div class="task-top">
+<div class="task-top">
                 <div>
                     <h5 class="{{ $task->is_done ? 'line' : '' }}">
                         {{ $task->title }}
                     </h5>
                     <p>{{ $task->description ?: 'No description provided.' }}</p>
+                    <p><small>Category: {{ $task->category ?: 'Uncategorized' }}</small></p>
+                    <p><small>Due: {{ $task->due_date ? \Carbon\Carbon::parse($task->due_date)->format('M d, Y') : 'Not set' }}</small></p>
                 </div>
 
                 <span class="badge {{ $task->is_done ? 'bg-success' : 'bg-warning' }}">

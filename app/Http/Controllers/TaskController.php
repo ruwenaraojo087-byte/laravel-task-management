@@ -17,9 +17,10 @@ class TaskController extends Controller
     return view('tasks.index', compact('tasks', 'completed', 'pending'));
 }
 
-    public function create()
+public function create()
     {
-        return view('tasks.create');
+        $categories = \App\Models\Category::orderBy('name')->get();
+        return view('tasks.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -28,9 +29,10 @@ class TaskController extends Controller
             'title' => 'required'
         ]);
 
-        Task::create([
+Task::create([
             'title' => $request->title,
             'description' => $request->description,
+            'due_date' => $request->due_date,
             'category' => $request->category,
             'is_done' => $request->has('is_done') ? 1 : 0,
         ]);
@@ -38,9 +40,10 @@ class TaskController extends Controller
         return redirect()->route('tasks.index');
     }
 
-    public function edit(Task $task)
+public function edit(Task $task)
     {
-        return view('tasks.edit', compact('task'));
+        $categories = \App\Models\Category::orderBy('name')->get();
+        return view('tasks.edit', compact('task', 'categories'));
     }
 
     
@@ -50,9 +53,10 @@ class TaskController extends Controller
             'title' => 'required'
         ]);
 
-        $task->update([
+$task->update([
             'title' => $request->title,
             'description' => $request->description,
+            'due_date' => $request->due_date,
             'is_done' => $request->has('is_done') ? 1 : 0,
         ]);
 
@@ -65,7 +69,7 @@ class TaskController extends Controller
         return redirect()->route('tasks.index');
     }
 
-    public function toggle(Task $task)
+public function toggle(Task $task)
     {
         $task->is_done = !$task->is_done;
         $task->save();
@@ -73,20 +77,27 @@ class TaskController extends Controller
         return back();
     }
     
-    public function stats()
+public function table()
+    {
+        $tasks = Task::orderBy('created_at', 'desc')->get();
+        return view('tasks.table', compact('tasks'));
+    }
+    
+    public function show(Task $task)
+    {
+        return view('tasks.show', compact('task'));
+    }
+    
+public function stats()
 {
     // Tasks per category
-{
     $categories = Task::select('category')
         ->selectRaw('count(*) as total')
         ->groupBy('category')
         ->pluck('total', 'category');
 
-    return view('stats', compact('categories'));
-}
-
-    // Today's tasks (if you have created_at)
-    $todayTasks = Task::whereDate('created_at', now())
+    // Today's tasks based on due_date (tasks due today)
+    $todayTasks = Task::whereDate('due_date', now()->toDateString())
         ->select('category')
         ->selectRaw('count(*) as total')
         ->groupBy('category')
