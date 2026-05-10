@@ -20,15 +20,7 @@ Route::get('/profile', [ProfileController::class, 'index']);
 
 
 
-
 Route::get('tasks/{task}/toggle', [TaskController::class, 'toggle'])->name('tasks.toggle');
 
-// Proper logout (clears session + invalidates CSRF token)
-Route::post('/logout', function () {
-    Auth::logout();
-    \Illuminate\Support\Facades\Session::invalidate();
-    \Illuminate\Support\Facades\Session::regenerateToken();
 
-    return redirect('/');
-})->middleware('web');
 
