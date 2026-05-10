@@ -4,11 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager</title>
-
-    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
     <style>
@@ -303,10 +299,11 @@ body {
                 <span class="d-none d-md-inline">Profile</span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>My Profile</a></li>
-                <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                <li><a class="dropdown-item" href="{{ url('/profile') }}"><i class="bi bi-person me-2"></i>My Profile</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+                <li>
+                    
+                </li>
             </ul>
         </div>
     </div>
@@ -342,12 +339,7 @@ body {
                 <span>All Tasks</span>
             </a>
         </li>
-        <li>
-<a href="{{ url('/profile') }}" class="{{ request()->is('profile') ? 'active' : '' }}">
-                <i class="bi bi-person"></i>
-                <span>Profile</span>
-            </a>
-        </li>
+        
     </ul>
 </div>
 

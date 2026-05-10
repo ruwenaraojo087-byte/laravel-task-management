@@ -4,7 +4,7 @@
 
 <h2>Statistics</h2>
 
-<div style="display: flex; gap:20px; margin-top:20px;">
+<div style="display: flex; justify-content: center; gap:20px; margin-top:20px;">
 
     <div style="background:white; padding:20px; border-radius:12px;">
         <h4>Tasks Per Category</h4>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Task;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -12,6 +12,11 @@ class ProfileController extends Controller
      */
     public function index(): View
     {
-        return view('profile');
+        // Pass tasks so profile "Quick Overview" cards stay in sync
+        // whenever tasks are added/edited/toggled/deleted.
+        $tasks = Task::query()->get();
+
+        return view('profile', compact('tasks'));
     }
 }
+
