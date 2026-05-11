@@ -7,15 +7,21 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-   public function index()
-{
-    $tasks = Task::all();
+    public function index()
+    {
+        $tasks = Task::all();
 
-    $completed = Task::where('is_done', 1)->count();
-    $pending = Task::where('is_done', 0)->count();
+        $completed = Task::where('is_done', 1)->count();
+        $pending = Task::where('is_done', 0)->count();
 
-    return view('tasks.index', compact('tasks', 'completed', 'pending'));
-}
+        // Overdue: pending tasks whose due date has passed
+        $overdue = Task::where('is_done', 0)
+            ->whereNotNull('due_date')
+            ->whereDate('due_date', '<', now()->toDateString())
+            ->count();
+
+        return view('tasks.index', compact('tasks', 'completed', 'pending', 'overdue'));
+    }
 
 public function create()
     {

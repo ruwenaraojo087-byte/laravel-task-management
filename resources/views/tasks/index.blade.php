@@ -7,7 +7,7 @@
     {{-- Header --}}
     <div class="dashboard-header">
         <div>
-            <h2>My Tasks</h2>
+            <h2>Daily Dash</h2>
             <p>Manage and track your daily tasks</p>
         </div>
 
@@ -26,6 +26,11 @@
         <div class="stat-card">
             <span>Pending</span>
             <h3>{{ $tasks->where('is_done', false)->count() }}</h3>
+        </div>
+
+        <div class="stat-card">
+            <span>Overdue</span>
+            <h3>{{ $overdue ?? 0 }}</h3>
         </div>
 
         <div class="stat-card">
