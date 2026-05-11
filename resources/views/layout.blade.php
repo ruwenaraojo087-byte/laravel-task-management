@@ -294,16 +294,24 @@ body {
     </div>
     <div class="nav-right">
         <div class="dropdown">
-            <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border: none; background: rgba(255,255,255,0.1);">
+<button class="btn btn-outline-light dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border: none; background: rgba(255,255,255,0.1);">
                 <i class="bi bi-person-circle"></i>
-                <span class="d-none d-md-inline">Profile</span>
+                <span class="d-none d-md-inline">Account</span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="{{ url('/profile') }}"><i class="bi bi-person me-2"></i>My Profile</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li>
-                    
-                </li>
+                @auth
+                    <li><a class="dropdown-item" href="{{ url('/profile') }}"><i class="bi bi-person me-2"></i>My Profile</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}" class="m-0">
+                            @csrf
+                            <button class="dropdown-item" type="submit" style="background: transparent; border: none; text-align: left;"> <i class="bi bi-box-arrow-right me-2"></i>Log out</button>
+                        </form>
+                    </li>
+                @else
+                    <li><a class="dropdown-item" href="{{ route('login') }}"><i class="bi bi-box-arrow-in-right me-2"></i>Log in</a></li>
+                    <li><a class="dropdown-item" href="{{ route('register') }}"><i class="bi bi-person-plus me-2"></i>Register</a></li>
+                @endauth
             </ul>
         </div>
     </div>
